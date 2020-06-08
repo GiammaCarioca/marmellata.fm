@@ -13,6 +13,7 @@ const App = () => {
 	const playerRef = useRef()
 	const [widget, setWidget] = useState(null)
 	const [playing, setPlaying] = useState(false)
+	const [currentMix, setCurrentMix] = useState('')
 
 	useEffect(() => {
 		const widget = Mixcloud.PlayerWidget(playerRef.current)
@@ -29,16 +30,10 @@ const App = () => {
 			// widget.play()
 
 			// using the mixcloud widget events we can detect when our audio has been paused, set playing state to false
-			widget.events.pause.on(() => {
-				console.log('paused')
-				setPlaying(false)
-			})
+			widget.events.pause.on(() => setPlaying(false))
 
 			//audio is playing again, so we set playing state to true
-			widget.events.play.on(() => {
-				console.log('playing')
-				setPlaying(true)
-			})
+			widget.events.play.on(() => setPlaying(true))
 		}
 
 		setupWidget(widget)
@@ -50,6 +45,9 @@ const App = () => {
 	}
 
 	const playMix = (mixName) => {
+		// update the currentMix in our state with the mixName
+		setCurrentMix(mixName)
+
 		// load a new mix by its name and then start playing it immediately
 		widget.load(mixName, true)
 	}
@@ -74,10 +72,19 @@ const App = () => {
 						</div>
 
 						<div>
+							<h1>current playing: {currentMix}</h1>
 							<button
 								onClick={() => playMix('/NTSRadio/bonobo-24th-june-2015/')}
 							>
-								Play mix
+								Play bonobo mix
+							</button>
+
+							<button
+								onClick={() =>
+									playMix('/NTSRadio/floating-points-four-tet-16th-march-2017/')
+								}
+							>
+								Play four tet mix
 							</button>
 						</div>
 
