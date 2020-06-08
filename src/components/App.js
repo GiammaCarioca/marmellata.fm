@@ -1,5 +1,5 @@
 /* global Mixcloud*/
-import React, { useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import FeaturedMix from './FeaturedMix'
@@ -11,6 +11,7 @@ const About = () => <h1>About</h1>
 
 const App = () => {
 	const playerRef = useRef()
+	const [widget, setWidget] = useState(null)
 
 	useEffect(() => {
 		const widget = Mixcloud.PlayerWidget(playerRef.current)
@@ -19,11 +20,20 @@ const App = () => {
 
 		const setupWidget = async (widget) => {
 			await widget.ready
+
+			// store the widget inside state so it's available outside this function
+			setWidget(widget)
+
 			widget.play()
 		}
 
 		setupWidget(widget)
 	}, []) // the callback will only be fired once, similar to componentDidMount
+
+	const togglePlay = () => {
+		if (!widget) return
+		widget.togglePlay()
+	}
 
 	return (
 		<Router>
@@ -37,6 +47,11 @@ const App = () => {
 						<Header />
 
 						{/* Routed page */}
+
+						<div>
+							<button onClick={() => togglePlay()}>Play/Pause</button>
+						</div>
+
 						<Switch>
 							<Route exact path="/">
 								<Home />
