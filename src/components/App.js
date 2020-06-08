@@ -12,6 +12,7 @@ const About = () => <h1>About</h1>
 const App = () => {
 	const playerRef = useRef()
 	const [widget, setWidget] = useState(null)
+	const [playing, setPlaying] = useState(false)
 
 	useEffect(() => {
 		const widget = Mixcloud.PlayerWidget(playerRef.current)
@@ -25,7 +26,19 @@ const App = () => {
 			setWidget(widget)
 
 			// start playing the mix immediately
-			widget.play()
+			// widget.play()
+
+			// using the mixcloud widget events we can detect when our audio has been paused, set playing state to false
+			widget.events.pause.on(() => {
+				console.log('paused')
+				setPlaying(false)
+			})
+
+			//audio is playing again, so we set playing state to true
+			widget.events.play.on(() => {
+				console.log('playing')
+				setPlaying(true)
+			})
 		}
 
 		setupWidget(widget)
@@ -55,7 +68,9 @@ const App = () => {
 						{/* Routed page */}
 
 						<div>
-							<button onClick={() => togglePlay()}>Play/Pause</button>
+							<button onClick={() => togglePlay()}>
+								{playing ? 'Pause' : 'Play'}
+							</button>
 						</div>
 
 						<div>
