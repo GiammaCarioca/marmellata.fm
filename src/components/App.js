@@ -24,6 +24,7 @@ const App = () => {
 			// store the widget inside state so it's available outside this function
 			setWidget(widget)
 
+			// start playing the mix immediately
 			widget.play()
 		}
 
@@ -33,6 +34,11 @@ const App = () => {
 	const togglePlay = () => {
 		if (!widget) return
 		widget.togglePlay()
+	}
+
+	const playMix = (mixName) => {
+		// load a new mix by its name and then start playing it immediately
+		widget.load(mixName, true)
 	}
 
 	return (
@@ -50,6 +56,14 @@ const App = () => {
 
 						<div>
 							<button onClick={() => togglePlay()}>Play/Pause</button>
+						</div>
+
+						<div>
+							<button
+								onClick={() => playMix('/NTSRadio/bonobo-24th-june-2015/')}
+							>
+								Play mix
+							</button>
 						</div>
 
 						<Switch>
