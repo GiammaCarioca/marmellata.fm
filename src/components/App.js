@@ -23,8 +23,6 @@ const App = () => {
 		// get the mix from the iframe and set it to state
 		setCurrentMix(initialMix)
 
-		// widget.ready.then((widget) => widget.play())
-
 		const setupWidget = async (widget) => {
 			// wait until the widget is ready
 			await widget.ready
@@ -32,49 +30,49 @@ const App = () => {
 			// store the widget inside state so it's available outside this function
 			setWidget(widget)
 
-			// using the mixcloud widget events we can detect when our audio has been paused, set playing state to false
-			widget.events.pause.on(() => setPlaying(false))
-
-			//audio is playing again, so we set playing state to true
-			widget.events.play.on(() => setPlaying(true))
-
 			// start playing the mix immediately; inconsistent
 			widget.play()
+
+			// widget.getIsPaused().then((paused) => console.log('is paused?', paused))
 		}
 
 		setupWidget(widget)
 	}, []) // the callback will only be fired once, similar to componentDidMount
 
-	const playMix = (mixName) => {
-		// widget.getIsPaused().then((paused) => console.log('is paused?', paused))
+	useEffect(() => {
+		const iframe = playerRef.current
+		const srcBase =
+			'https://www.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed='
 
+		iframe.removeAttribute('src')
+
+		requestAnimationFrame(() => {
+			iframe.src = srcBase + currentMix
+		})
+	}, [currentMix, widget])
+
+	const playMix = (mixName) => {
 		if (!widget) return
 
 		if (currentMix === mixName) {
-			// update the currentMix in our state with the mixName
-			// setCurrentMix(mixName) // asynchronous!!!
-
 			console.log('equal?', currentMix === mixName)
 			widget.togglePlay()
 
-			widget.events.pause.on(() => setPlaying(false)) // asynchronous!!!
-			widget.events.play.on(() => setPlaying(true)) // asynchronous!!!
+			widget.events.pause.on(() => setPlaying(false))
+			widget.events.play.on(() => setPlaying(true))
 
 			return
 		}
 
 		if (currentMix !== mixName) {
-			console.log('equal?', currentMix === mixName)
-			console.log('play this!', mixName)
-
 			// update the currentMix in our state with the mixName
-			setCurrentMix(mixName) // asynchronous!!!
+			setCurrentMix(mixName)
 
 			// load a new mix by its name and then start playing it immediately
 			widget.load(mixName, true)
 
-			widget.events.pause.on(() => setPlaying(false)) // asynchronous!!!
-			widget.events.play.on(() => setPlaying(true)) // asynchronous!!!
+			widget.events.pause.on(() => setPlaying(false))
+			widget.events.play.on(() => setPlaying(true))
 
 			return
 		}
@@ -95,19 +93,42 @@ const App = () => {
 
 						<div>
 							{!!currentMix && <h1>current mix: {currentMix}</h1>}
-							{playing ? <p>playing</p> : <p>paused</p>}
 							<button
-								onClick={() => playMix('/NTSRadio/bonobo-24th-june-2015/')}
+								onClick={() =>
+									playMix('%2FNTSRadio%2Fbonobo-24th-june-2015%2F')
+								}
 							>
-								'Play/Pause bonobo mix'
+								{!playing ? 'PLAY bonobo mix' : 'PAUSE bonobo mix'}
 							</button>
 
 							<button
 								onClick={() =>
-									playMix('/NTSRadio/floating-points-four-tet-16th-march-2017/')
+									playMix(
+										'%2FNTSRadio%2Ffloating-points-four-tet-16th-march-2017%2F'
+									)
 								}
 							>
-								Play/Pause four tet mix'
+								{!playing ? 'PLAY four tet mix' : 'PAUSE four tet mix'}
+							</button>
+
+							<button
+								onClick={() =>
+									playMix(
+										'%2FNTSRadio%2Fmint-condition-w-hotthobo-27th-november-2017%2F'
+									)
+								}
+							>
+								{!playing
+									? 'PLAY mint condition mix'
+									: 'PAUSE mint condition mix'}
+							</button>
+
+							<button
+								onClick={() =>
+									playMix('%2FNTSRadio%2Ffull-house-6th-november-2017%2F')
+								}
+							>
+								{!playing ? 'PLAY full house mix' : 'PAUSE full house mix'}
 							</button>
 						</div>
 
@@ -124,18 +145,18 @@ const App = () => {
 						</Switch>
 					</div>
 				</div>
-
 				{/* AudioPlayer */}
 				<iframe
 					title="mixcloud"
 					width="100%"
 					height="60"
 					src="https://www.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=%2FNTSRadio%2Ffloating-points-jamie-xx-18th-august-2016%2F"
-					frameBorder="0"
 					className="db fixed bottom-0 z-5"
-					id="/NTSRadio/floating-points-jamie-xx-18th-august-2016/"
 					ref={playerRef}
-				/>
+					id="/NTSRadio/floating-points-jamie-xx-18th-august-2016/"
+					sandbox="allow-scripts allow-same-origin"
+					allow="autoplay 'src' https://www.mixcloud.com/"
+				></iframe>
 			</div>
 		</Router>
 	)
