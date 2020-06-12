@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import FeaturedMix from './FeaturedMix'
 import Header from './Header'
+import Home from './Home'
 
-const Home = () => <h1>Home</h1>
 const Archive = () => <h1>Archive</h1>
 const About = () => <h1>About</h1>
 
@@ -90,48 +90,6 @@ const App = () => {
 						<Header />
 
 						{/* Routed page */}
-
-						<div>
-							{!!currentMix && <h1>current mix: {currentMix}</h1>}
-							<button
-								onClick={() =>
-									playMix('%2FNTSRadio%2Fbonobo-24th-june-2015%2F')
-								}
-							>
-								{!playing ? 'PLAY bonobo mix' : 'PAUSE bonobo mix'}
-							</button>
-
-							<button
-								onClick={() =>
-									playMix(
-										'%2FNTSRadio%2Ffloating-points-four-tet-16th-march-2017%2F'
-									)
-								}
-							>
-								{!playing ? 'PLAY four tet mix' : 'PAUSE four tet mix'}
-							</button>
-
-							<button
-								onClick={() =>
-									playMix(
-										'%2FNTSRadio%2Fmint-condition-w-hotthobo-27th-november-2017%2F'
-									)
-								}
-							>
-								{!playing
-									? 'PLAY mint condition mix'
-									: 'PAUSE mint condition mix'}
-							</button>
-
-							<button
-								onClick={() =>
-									playMix('%2FNTSRadio%2Ffull-house-6th-november-2017%2F')
-								}
-							>
-								{!playing ? 'PLAY full house mix' : 'PAUSE full house mix'}
-							</button>
-						</div>
-
 						<Switch>
 							<Route exact path="/">
 								<Home />
