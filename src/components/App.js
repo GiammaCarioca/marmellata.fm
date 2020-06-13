@@ -1,6 +1,8 @@
 /* global Mixcloud*/
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+
+import MixesContext from '../context/mixes-context'
 
 import FeaturedMix from './FeaturedMix'
 import Header from './Header'
@@ -10,8 +12,12 @@ const Archive = () => <h1>Archive</h1>
 const About = () => <h1>About</h1>
 
 const App = () => {
+	const context = useContext(MixesContext)
+	context.displayName = 'Mixes'
+
 	const playerRef = useRef()
 	const [widget, setWidget] = useState(null)
+	// eslint-disable-next-line no-unused-vars
 	const [playing, setPlaying] = useState(false)
 	const [currentMix, setCurrentMix] = useState('')
 
@@ -31,9 +37,10 @@ const App = () => {
 			setWidget(widget)
 
 			// start playing the mix immediately; inconsistent
-			widget.play()
+			// widget.play()
 
-			// widget.getIsPaused().then((paused) => console.log('is paused?', paused))
+			widget.events.pause.on(() => setPlaying(false)) // not working!
+			widget.events.play.on(() => setPlaying(true)) // not working!
 		}
 
 		setupWidget(widget)
@@ -49,13 +56,12 @@ const App = () => {
 		requestAnimationFrame(() => {
 			iframe.src = srcBase + currentMix
 		})
-	}, [currentMix, widget])
+	}, [currentMix])
 
 	const playMix = (mixName) => {
 		if (!widget) return
 
 		if (currentMix === mixName) {
-			console.log('equal?', currentMix === mixName)
 			widget.togglePlay()
 
 			widget.events.pause.on(() => setPlaying(false))
@@ -69,7 +75,7 @@ const App = () => {
 			setCurrentMix(mixName)
 
 			// load a new mix by its name and then start playing it immediately
-			widget.load(mixName, true)
+			widget.load(mixName, false)
 
 			widget.events.pause.on(() => setPlaying(false))
 			widget.events.play.on(() => setPlaying(true))
@@ -79,44 +85,45 @@ const App = () => {
 	}
 
 	return (
-		<Router>
-			<div>
-				<div className="flex-l justify-end">
-					{/* FeaturedMix */}
-					<FeaturedMix />
+		<MixesContext.Provider value={{ ...context, playMix }}>
+			<Router>
+				<div>
+					<div className="flex-l justify-end">
+						{/* FeaturedMix */}
+						<FeaturedMix />
 
-					<div className="w-50-l relative z-1">
-						{/* Header */}
-						<Header />
+						<div className="w-50-l relative z-1">
+							{/* Header */}
+							<Header />
 
-						{/* Routed page */}
-						<Switch>
-							<Route exact path="/">
-								<Home />
-							</Route>
-							<Route path="/archive">
-								<Archive />
-							</Route>
-							<Route path="/about">
-								<About />
-							</Route>
-						</Switch>
+							{/* Routed page */}
+							<Switch>
+								<Route exact path="/">
+									<Home />
+								</Route>
+								<Route path="/archive">
+									<Archive />
+								</Route>
+								<Route path="/about">
+									<About />
+								</Route>
+							</Switch>
+						</div>
 					</div>
+					{/* AudioPlayer */}
+					<iframe
+						title="mixcloud"
+						width="100%"
+						height="60"
+						src={context.defaultMix.src}
+						className="db fixed bottom-0 z-5"
+						ref={playerRef}
+						id={context.defaultMix.id}
+						sandbox="allow-scripts allow-same-origin"
+					></iframe>
 				</div>
-				{/* AudioPlayer */}
-				<iframe
-					title="mixcloud"
-					width="100%"
-					height="60"
-					src="https://www.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=%2FNTSRadio%2Ffloating-points-jamie-xx-18th-august-2016%2F"
-					className="db fixed bottom-0 z-5"
-					ref={playerRef}
-					id="/NTSRadio/floating-points-jamie-xx-18th-august-2016/"
-					sandbox="allow-scripts allow-same-origin"
-					allow="autoplay 'src' https://www.mixcloud.com/"
-				></iframe>
-			</div>
-		</Router>
+			</Router>
+		</MixesContext.Provider>
 	)
 }
 export default App
