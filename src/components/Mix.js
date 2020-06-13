@@ -1,16 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
+
+import PlayMix from './PlayMix'
 import PlayButton from './PlayButton'
 
-import MixesContext from '../context/mixes-context'
-
-const Mix = ({ name, id }) => {
-	const { playMix } = useContext(MixesContext)
-
-	return (
-		<div
-			className="aspect-ratio aspect-ratio--3x4 pointer bg-black"
-			onClick={() => playMix(id)}
-		>
+const Mix = ({ name, id }) => (
+	<div className="aspect-ratio aspect-ratio--3x4 pointer bg-black">
+		<PlayMix id={id}>
 			<div className="ph3 pv4 aspect-ratio--object mix-overlay">
 				<div className="flex items-center relative z-2">
 					<h1 className="f4 f3-l mv0 white ttu biryani pr2 lh-title">{name}</h1>
@@ -18,8 +13,8 @@ const Mix = ({ name, id }) => {
 					<PlayButton />
 				</div>
 			</div>
-		</div>
-	)
-}
+		</PlayMix>
+	</div>
+)
 
 export default Mix
