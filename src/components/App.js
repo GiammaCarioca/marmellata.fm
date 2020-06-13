@@ -13,13 +13,38 @@ const About = () => <h1>About</h1>
 
 const App = () => {
 	const context = useContext(MixesContext)
-	context.displayName = 'Mixes'
+	const mixesIds = context.mixes
 
 	const playerRef = useRef()
 	const [widget, setWidget] = useState(null)
-	// eslint-disable-next-line no-unused-vars
 	const [playing, setPlaying] = useState(false)
 	const [currentMix, setCurrentMix] = useState('')
+	const [data, setData] = useState([])
+
+	useEffect(() => {
+		const getMixes = () => {
+			return Promise.all(
+				mixesIds.map((id) =>
+					fetch(`https://api.mixcloud.com${id}`)
+						.then((response) => response.json())
+						.then((data) => data)
+				)
+			).then((data) =>
+				data.map((mix) => ({
+					...mix,
+					id: mix.key,
+				}))
+			)
+		}
+
+		const setMixes = async () => {
+			const mixesWithId = await getMixes()
+
+			return setData(mixesWithId)
+		}
+
+		setMixes()
+	}, [mixesIds])
 
 	useEffect(() => {
 		const widget = Mixcloud.PlayerWidget(playerRef.current)
@@ -87,7 +112,15 @@ const App = () => {
 	}
 
 	return (
-		<MixesContext.Provider value={{ ...context, playMix, currentMix, playing }}>
+		<MixesContext.Provider
+			value={{
+				...context,
+				data,
+				playMix,
+				currentMix,
+				playing,
+			}}
+		>
 			<Router>
 				<div>
 					<div className="flex-l justify-end">
@@ -117,10 +150,10 @@ const App = () => {
 						title="mixcloud"
 						width="100%"
 						height="60"
-						src={context.defaultMix.src}
+						src="%2FNTSRadio%2Ffloating-points-jamie-xx-18th-august-2016%2F"
 						className="db fixed bottom-0 z-5"
 						ref={playerRef}
-						id={context.defaultMix.id}
+						id="/NTSRadio/floating-points-jamie-xx-18th-august-2016/"
 						sandbox="allow-scripts allow-same-origin"
 					></iframe>
 				</div>
