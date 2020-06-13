@@ -77,6 +77,8 @@ const App = () => {
 			// load a new mix by its name and then start playing it immediately
 			widget.load(mixName, false)
 
+			setPlaying(false)
+
 			widget.events.pause.on(() => setPlaying(false))
 			widget.events.play.on(() => setPlaying(true))
 
@@ -85,7 +87,7 @@ const App = () => {
 	}
 
 	return (
-		<MixesContext.Provider value={{ ...context, playMix, currentMix }}>
+		<MixesContext.Provider value={{ ...context, playMix, currentMix, playing }}>
 			<Router>
 				<div>
 					<div className="flex-l justify-end">
