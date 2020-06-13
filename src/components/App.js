@@ -7,8 +7,8 @@ import MixesContext from '../context/mixes-context'
 import FeaturedMix from './FeaturedMix'
 import Header from './Header'
 import Home from './Home'
+import Archive from './Archive'
 
-const Archive = () => <h1>Archive</h1>
 const About = () => <h1>About</h1>
 
 const App = () => {
