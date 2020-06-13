@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
+
+import MixesContext from '../context/mixes-context'
 
 const Stat = ({ statName, statNumber, statWord }) => (
 	<div
@@ -12,25 +14,47 @@ const Stat = ({ statName, statNumber, statWord }) => (
 	</div>
 )
 
-const About = () => (
-	<div className="ph3 ph4-l">
-		<div className="measure center lh-copy f4 ph3">
-			<p className="mt0">
-				Marmalade.fm features the latest and greatest in grooves, beats and
-				world music.
-			</p>
-			<p>
-				Whether you’re into hip hop, trip hop, classic jazz, fusion jazz, afro
-				beat or break beat… we have you covered!
-			</p>
-		</div>
+const About = () => {
+	const { data: mixes } = useContext(MixesContext)
 
-		<div className="flex pt3">
-			<Stat statName="Featuring..." statNumber={11} statWord="mixes" />
-			<Stat statName="Played..." statNumber={114746} statWord="times" />
-			<Stat statName="With..." statNumber={64851} statWord="seconds" />
+	return (
+		<div className="ph3 ph4-l">
+			<div className="measure center lh-copy f4 ph3">
+				<p className="mt0">
+					Marmalade.fm features the latest and greatest in grooves, beats and
+					world music.
+				</p>
+				<p>
+					Whether you’re into hip hop, trip hop, classic jazz, fusion jazz, afro
+					beat or break beat… we have you covered!
+				</p>
+			</div>
+
+			<div className="flex pt3">
+				<Stat
+					statName="Featuring..."
+					statNumber={mixes.length}
+					statWord="mixes"
+				/>
+				<Stat
+					statName="Played..."
+					statNumber={mixes.reduce(
+						(accum, current) => accum + current.play_count,
+						0
+					)}
+					statWord="times"
+				/>
+				<Stat
+					statName="With..."
+					statNumber={mixes.reduce(
+						(accum, current) => accum + current.audio_length,
+						0
+					)}
+					statWord="seconds"
+				/>
+			</div>
 		</div>
-	</div>
-)
+	)
+}
 
 export default About
