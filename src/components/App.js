@@ -85,7 +85,7 @@ const App = () => {
 	}
 
 	return (
-		<MixesContext.Provider value={{ ...context, playMix }}>
+		<MixesContext.Provider value={{ ...context, playMix, currentMix }}>
 			<Router>
 				<div>
 					<div className="flex-l justify-end">
