@@ -114,7 +114,7 @@ const App = () => {
 	return (
 		<MixesContext.Provider
 			value={{
-				...context,
+				widget,
 				data,
 				playMix,
 				currentMix,
@@ -147,14 +147,14 @@ const App = () => {
 					</div>
 					{/* AudioPlayer */}
 					<iframe
-						title="mixcloud"
+						ref={playerRef}
+						title="mixcloud-iframe"
+						sandbox="allow-scripts allow-same-origin"
 						width="100%"
 						height="60"
-						src="%2FNTSRadio%2Ffloating-points-jamie-xx-18th-august-2016%2F"
 						className="db fixed bottom-0 z-5"
-						ref={playerRef}
+						src="%2FNTSRadio%2Ffloating-points-jamie-xx-18th-august-2016%2F"
 						id="/NTSRadio/floating-points-jamie-xx-18th-august-2016/"
-						sandbox="allow-scripts allow-same-origin"
 					></iframe>
 				</div>
 			</Router>
