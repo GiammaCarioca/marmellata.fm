@@ -1,16 +1,15 @@
 import React, { useContext } from 'react'
+import Counter from './Counter'
 
 import MixesContext from '../context/mixes-context'
 
 const Stat = ({ statName, statNumber, statWord }) => (
-	<div
-		className="w-third tc pa3 ba bw2 b--light-gray"
-		style={{ marginRight: -2 }}
-	>
-		<div className="f6 biryani ttu">{statName}</div>
-		<div className="f5 b biryani-black ttu tracked">
-			{statNumber} {statWord}
-		</div>
+	<div className="mb4">
+		<div className="f5 black mb0 b">{statName}</div>
+
+		<Counter end={statNumber} duration={3} />
+
+		<div className="f4 lh-1">{statWord}</div>
 	</div>
 )
 
@@ -18,8 +17,8 @@ const About = () => {
 	const { data: mixes } = useContext(MixesContext)
 
 	return (
-		<div className="ph3 ph4-l">
-			<div className="measure center lh-copy f4 ph3">
+		<div className="measure center mb6">
+			<div className="lh-copy mb4">
 				<p className="mt0">
 					Marmalade.fm features the latest and greatest in grooves, beats and
 					world music.
@@ -30,7 +29,7 @@ const About = () => {
 				</p>
 			</div>
 
-			<div className="flex pt3">
+			<div>
 				<Stat
 					statName="Featuring..."
 					statNumber={mixes.length}
