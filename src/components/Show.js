@@ -30,41 +30,55 @@ const Tags = ({ tags }) => (
 
 const Show = () => {
 	const { data: mixes } = useContext(MixesContext)
-
 	const [mix, setMix] = useState({})
-
 	const { slug } = useParams()
 
+	const getMixFromSlug = async (mixes, slug) => {
+		const result = await mixes.filter((mix) => mix.slug === slug)
+
+		if (result) return result[0]
+	}
+
+	getMixFromSlug(mixes, slug)
+
 	useEffect(() => {
-		Promise.all(mixes.filter((item) => item.slug === slug))
-			.then(([firstMix]) => {
-				if (!!firstMix) return setMix(firstMix)
-			})
-			.catch((error) => console.log(`Error in promises ${error}`))
+		const setShowPage = async (mixes, slug) => {
+			const firstMix = await getMixFromSlug(mixes, slug)
+
+			if (firstMix) setMix(firstMix)
+		}
+
+		setShowPage(mixes, slug)
 	}, [mixes, slug])
 
 	const { description, play_count, created_time, audio_length, tags } = mix
 
 	return (
 		<div className={'ph3 ph4-l pad-bottom'}>
-			<div className={'measure center lh-copy'}>
-				<Tags tags={tags} />
-				<p>{description}</p>
+			{mix && (
+				<div className={'measure center lh-copy'}>
+					<Tags tags={tags} />
+					<p>{description}</p>
 
-				<Stat statName="Plays" statNumber={play_count || 0} statWord="times" />
+					<Stat
+						statName="Plays"
+						statNumber={play_count || 0}
+						statWord="times"
+					/>
 
-				<Stat
-					statName="Uploaded"
-					statNumber={differenceInDays(new Date(), parseISO(created_time))}
-					statWord="days ago"
-				/>
+					<Stat
+						statName="Uploaded"
+						statNumber={differenceInDays(new Date(), parseISO(created_time))}
+						statWord="days ago"
+					/>
 
-				<Stat
-					statName="Lasting for"
-					statNumber={audio_length / 60}
-					statWord="minutes"
-				/>
-			</div>
+					<Stat
+						statName="Lasting for"
+						statNumber={audio_length / 60}
+						statWord="minutes"
+					/>
+				</div>
+			)}
 		</div>
 	)
 }
