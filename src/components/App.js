@@ -9,6 +9,7 @@ import Header from './Header'
 import Home from './Home'
 import Archive from './Archive'
 import About from './About'
+import Show from './Show'
 
 const App = () => {
 	const context = useContext(MixesContext)
@@ -140,6 +141,9 @@ const App = () => {
 								</Route>
 								<Route path="/about">
 									<About />
+								</Route>
+								<Route path="/show/:slug">
+									<Show />
 								</Route>
 							</Switch>
 						</div>
