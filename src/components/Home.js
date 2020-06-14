@@ -4,7 +4,7 @@ import Mix from './Mix'
 import MixesContext from '../context/mixes-context'
 
 const Home = () => {
-	const { data: mixes } = useContext(MixesContext)
+	const { mixes } = useContext(MixesContext)
 
 	return (
 		<div className="flex flex-wrap justify-between mixes ph3 ph4-l mb5">

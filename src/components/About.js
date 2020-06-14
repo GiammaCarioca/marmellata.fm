@@ -4,7 +4,7 @@ import Stat from './Stat'
 import MixesContext from '../context/mixes-context'
 
 const About = () => {
-	const { data: mixes } = useContext(MixesContext)
+	const { mixes } = useContext(MixesContext)
 
 	return (
 		<div className="ph3 ph4-l pad-bottom">

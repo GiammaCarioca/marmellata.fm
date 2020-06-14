@@ -5,10 +5,10 @@ import PlayButton from './PlayButton'
 import MixesContext from '../context/mixes-context'
 
 const FeaturedMix = () => {
-	const { data } = useContext(MixesContext)
+	const { mixes } = useContext(MixesContext)
 
 	// this makes a variable from our first mix in the array
-	const [firstMix = {}] = data
+	const [firstMix = {}] = mixes
 	const { id, name, pictures = {} } = firstMix
 
 	return (

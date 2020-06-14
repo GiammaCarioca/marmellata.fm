@@ -19,7 +19,7 @@ const App = () => {
 	const [widget, setWidget] = useState(null)
 	const [playing, setPlaying] = useState(false)
 	const [currentMix, setCurrentMix] = useState('')
-	const [data, setData] = useState([])
+	const [mixes, setMixes] = useState([])
 
 	useEffect(() => {
 		const fetchingMixes = (mixesIds) => {
@@ -39,51 +39,45 @@ const App = () => {
 			}))
 		}
 
-		const setMixes = async (mixesIds) => {
+		const setData = async (mixesIds) => {
 			const mixesWithoutIds = await fetchingMixes(mixesIds)
 			const mixesWithIds = await updateWithIds(mixesWithoutIds)
 
-			return setData(mixesWithIds)
+			return setMixes(mixesWithIds)
 		}
 
-		setMixes(mixesIds)
+		setData(mixesIds)
 	}, [mixesIds])
 
 	useEffect(() => {
 		const widget = Mixcloud.PlayerWidget(playerRef.current)
 
-		const initialMix = playerRef.current.id
-
-		// get the mix from the iframe and set it to state
-		setCurrentMix(initialMix)
+		setCurrentMix(playerRef.current.id)
 
 		const setupWidget = async (widget) => {
-			// wait until the widget is ready
 			await widget.ready
 
-			// store the widget inside state so it's available outside this function
 			setWidget(widget)
-
-			// start playing the mix immediately; inconsistent
-			// widget.play()
-
-			widget.events.pause.on(() => setPlaying(false)) // not working!
-			widget.events.play.on(() => setPlaying(true)) // not working!
 		}
 
 		setupWidget(widget)
-	}, []) // the callback will only be fired once, similar to componentDidMount
+	}, [])
 
 	useEffect(() => {
 		const iframe = playerRef.current
-		const srcBase =
-			'https://www.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed='
 
-		iframe.removeAttribute('src')
+		const replaceSrc = (iframe) => {
+			const srcBase =
+				'https://www.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed='
 
-		requestAnimationFrame(() => {
-			iframe.src = srcBase + currentMix
-		})
+			iframe.removeAttribute('src')
+
+			requestAnimationFrame(() => {
+				iframe.src = srcBase + currentMix
+			})
+		}
+
+		replaceSrc(iframe)
 	}, [currentMix])
 
 	const playMix = (mixName) => {
@@ -102,7 +96,6 @@ const App = () => {
 			// update the currentMix in our state with the mixName
 			setCurrentMix(mixName)
 
-			// load a new mix by its name and then start playing it immediately
 			widget.load(mixName, false)
 
 			setPlaying(false)
@@ -118,7 +111,7 @@ const App = () => {
 		<MixesContext.Provider
 			value={{
 				widget,
-				data,
+				mixes,
 				playMix,
 				currentMix,
 				playing,

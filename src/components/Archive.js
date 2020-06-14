@@ -5,7 +5,7 @@ import PlayButton from './PlayButton'
 import MixesContext from '../context/mixes-context'
 
 const Archive = () => {
-	const { data: mixes } = useContext(MixesContext)
+	const { mixes } = useContext(MixesContext)
 
 	return (
 		<ul className="list pl0 archive mv0 pad-bottom">

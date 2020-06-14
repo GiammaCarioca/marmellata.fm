@@ -29,7 +29,7 @@ const Tags = ({ tags }) => (
 )
 
 const Show = () => {
-	const { data: mixes } = useContext(MixesContext)
+	const { mixes } = useContext(MixesContext)
 	const [mix, setMix] = useState({})
 	const { slug } = useParams()
 
