@@ -23,7 +23,7 @@ const FeaturedMix = () => {
 					<PlayMix id={id}>
 						<div className="w-100 tc pa3 relative z-2">
 							<p className="b biryani f6 white ttu">Featured mix</p>
-							<h1 className="mix-title mt0 mb2 anton white ttu">{name}</h1>
+							<h1 className="mix-title mt0 mb3 anton white ttu">{name}</h1>
 							<PlayButton />
 						</div>
 					</PlayMix>
