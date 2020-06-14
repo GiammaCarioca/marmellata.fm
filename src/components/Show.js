@@ -44,7 +44,6 @@ const Show = () => {
 	}, [mixes, slug])
 
 	const { description, play_count, created_time, audio_length, tags } = mix
-	console.log(mix)
 
 	return (
 		<div className={'ph3 ph4-l pad-bottom'}>

@@ -22,28 +22,31 @@ const App = () => {
 	const [data, setData] = useState([])
 
 	useEffect(() => {
-		const getMixes = () => {
+		const fetchingMixes = (mixesIds) => {
 			return Promise.all(
 				mixesIds.map((id) =>
 					fetch(`https://api.mixcloud.com${id}`)
 						.then((response) => response.json())
 						.then((data) => data)
 				)
-			).then((data) =>
-				data.map((mix) => ({
-					...mix,
-					id: mix.key,
-				}))
 			)
 		}
 
-		const setMixes = async () => {
-			const mixesWithId = await getMixes()
-
-			return setData(mixesWithId)
+		const updateWithIds = (mixes) => {
+			return mixes.map((mix) => ({
+				...mix,
+				id: mix.key,
+			}))
 		}
 
-		setMixes()
+		const setMixes = async (mixesIds) => {
+			const mixesWithoutIds = await fetchingMixes(mixesIds)
+			const mixesWithIds = await updateWithIds(mixesWithoutIds)
+
+			return setData(mixesWithIds)
+		}
+
+		setMixes(mixesIds)
 	}, [mixesIds])
 
 	useEffect(() => {
