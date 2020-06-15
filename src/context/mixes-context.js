@@ -1,6 +1,6 @@
-import React from 'react'
+import { createContext } from 'react'
 
-const MixesContext = React.createContext({
+const MixesContext = createContext({
 	mixes: [
 		'/maxvibes/ninja-tune-jazz-session-part-1/',
 		'/NTSRadio/mint-condition-w-hotthobo-27th-november-2017/',
