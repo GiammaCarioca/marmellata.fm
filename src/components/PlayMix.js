@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 
 import MixContext from '../context/mix-context'
 
-const PlayMix = ({ id, children }) => {
+const PlayMix = ({ id, children, className }) => {
 	const { playMix, currentMix, playing } = useContext(MixContext)
 
 	return (
@@ -10,7 +10,7 @@ const PlayMix = ({ id, children }) => {
 		// that this component refers to, we will add a class name
 		// of 'playing'
 		<div
-			className={`pointer ${id === currentMix && playing && 'playing'}`}
+			className={`${className} ${id === currentMix && playing && 'playing'}`}
 			onClick={() => playMix(id)}
 		>
 			{children}
