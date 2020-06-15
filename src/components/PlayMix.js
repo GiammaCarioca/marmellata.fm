@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import classNames from 'classnames'
 
 import MixContext from '../context/mix-context'
 
@@ -8,9 +9,13 @@ const PlayMix = ({ id, children, className }) => {
 	return (
 		// when our currently playing mix equals the id of the mix
 		// that this component refers to, we will add a class name
-		// of 'playing'
+		// of 'playing' or 'loading'
 		<div
-			className={`${className} ${id === currentMix && playing && 'playing'}`}
+			className={classNames({
+				[className]: className,
+				playing: id === currentMix && playing,
+				loading: id === currentMix && !playing,
+			})}
 			onClick={() => playMix(id)}
 		>
 			{children}
