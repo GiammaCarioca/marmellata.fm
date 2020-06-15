@@ -1,45 +1,13 @@
 /* global Mixcloud*/
-import React, { useRef, useState, useEffect, useContext } from 'react'
+import React, { useRef, useEffect, useContext } from 'react'
 
-import MixesContext from '../context/mixes-context'
+import MixContext from '../context/mix-context'
 
-const Player = ({ setMixes }) => {
-	const context = useContext(MixesContext)
-	const mixesIds = context.context.mixes
+const Player = () => {
+	const context = useContext(MixContext)
+	const { setWidget, setCurrentMix, currentMix } = context
 
 	const playerRef = useRef()
-	const [widget, setWidget] = useState(null)
-	// eslint-disable-next-line no-unused-vars
-	const [playing, setPlaying] = useState(false)
-	const [currentMix, setCurrentMix] = useState('')
-
-	useEffect(() => {
-		const fetchingMixes = (mixesIds) => {
-			return Promise.all(
-				mixesIds.map((id) =>
-					fetch(`https://api.mixcloud.com${id}`)
-						.then((response) => response.json())
-						.then((data) => data)
-				)
-			)
-		}
-
-		const updateWithIds = (mixes) => {
-			return mixes.map((mix) => ({
-				...mix,
-				id: mix.key,
-			}))
-		}
-
-		const setData = async (mixesIds) => {
-			const mixesWithoutIds = await fetchingMixes(mixesIds)
-			const mixesWithIds = await updateWithIds(mixesWithoutIds)
-
-			return setMixes(mixesWithIds)
-		}
-
-		setData(mixesIds)
-	}, [mixesIds, setMixes])
 
 	useEffect(() => {
 		const widget = Mixcloud.PlayerWidget(playerRef.current)
@@ -53,7 +21,7 @@ const Player = ({ setMixes }) => {
 		}
 
 		setupWidget(widget)
-	}, [])
+	}, [setCurrentMix, setWidget])
 
 	useEffect(() => {
 		const iframe = playerRef.current
@@ -71,33 +39,6 @@ const Player = ({ setMixes }) => {
 
 		replaceSrc(iframe)
 	}, [currentMix])
-
-	const playMix = (mixName) => {
-		if (!widget) return
-
-		if (currentMix === mixName) {
-			widget.togglePlay()
-
-			widget.events.pause.on(() => setPlaying(false))
-			widget.events.play.on(() => setPlaying(true))
-
-			return
-		}
-
-		if (currentMix !== mixName) {
-			// update the currentMix in our state with the mixName
-			setCurrentMix(mixName)
-
-			widget.load(mixName, false)
-
-			setPlaying(false)
-
-			widget.events.pause.on(() => setPlaying(false))
-			widget.events.play.on(() => setPlaying(true))
-
-			return
-		}
-	}
 
 	return (
 		<iframe

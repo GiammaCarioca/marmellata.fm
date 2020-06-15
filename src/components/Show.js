@@ -5,7 +5,7 @@ import differenceInDays from 'date-fns/differenceInDays'
 
 import Stat from './Stat'
 
-import MixesContext from '../context/mixes-context'
+import MixContext from '../context/mix-context'
 
 const Tag = ({ name, url }) => (
 	<div className="mr2 mb2 o-70">
@@ -29,7 +29,7 @@ const Tags = ({ tags }) => (
 )
 
 const Show = () => {
-	const { mixes } = useContext(MixesContext)
+	const { mixes } = useContext(MixContext)
 	const [mix, setMix] = useState({})
 	const { slug } = useParams()
 

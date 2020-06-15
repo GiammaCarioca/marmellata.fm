@@ -2,10 +2,10 @@ import React, { useContext } from 'react'
 import PlayMix from './PlayMix'
 import PlayButton from './PlayButton'
 
-import MixesContext from '../context/mixes-context'
+import MixContext from '../context/mix-context'
 
 const Archive = () => {
-	const { mixes } = useContext(MixesContext)
+	const { mixes } = useContext(MixContext)
 
 	return (
 		<ul className="list pl0 archive mv0 pad-bottom">

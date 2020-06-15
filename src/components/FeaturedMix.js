@@ -2,10 +2,10 @@ import React, { useContext } from 'react'
 import PlayMix from './PlayMix'
 import PlayButton from './PlayButton'
 
-import MixesContext from '../context/mixes-context'
+import MixContext from '../context/mix-context'
 
 const FeaturedMix = () => {
-	const { mixes } = useContext(MixesContext)
+	const { mixes } = useContext(MixContext)
 
 	// this makes a variable from our first mix in the array
 	const [firstMix = {}] = mixes

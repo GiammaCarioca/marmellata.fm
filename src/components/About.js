@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import Stat from './Stat'
 
-import MixesContext from '../context/mixes-context'
+import MixContext from '../context/mix-context'
 
 const About = () => {
-	const { mixes } = useContext(MixesContext)
+	const { mixes } = useContext(MixContext)
 
 	return (
 		<div className="ph3 ph4-l pad-bottom">

@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-import MixesContext from '../context/mixes-context'
+import GlobalState from '../context/GlobalState'
 
 import FeaturedMix from './FeaturedMix'
 import Header from './Header'
@@ -12,49 +12,38 @@ import Show from './Show'
 import Player from './Player'
 
 const App = () => {
-	const context = useContext(MixesContext)
-
-	const [mixes, setMixes] = useState([])
-
-	// get updated values from child component
-	const updateValues = (newValue) => {
-		setMixes(newValue)
-	}
-
 	return (
-		<MixesContext.Provider value={{ context, mixes }}>
+		<GlobalState>
 			<Router>
-				<div>
-					<div className="flex-l justify-end">
-						{/* FeaturedMix */}
-						<FeaturedMix />
+				<div className="flex-l justify-end">
+					{/* FeaturedMix */}
+					<FeaturedMix />
 
-						<div className="w-50-l relative z-1">
-							{/* Header */}
-							<Header />
+					<div className="w-50-l relative z-1">
+						{/* Header */}
+						<Header />
 
-							{/* Routed page */}
-							<Switch>
-								<Route exact path="/">
-									<Home />
-								</Route>
-								<Route path="/archive">
-									<Archive />
-								</Route>
-								<Route path="/about">
-									<About />
-								</Route>
-								<Route path="/show/:slug">
-									<Show />
-								</Route>
-							</Switch>
-						</div>
+						{/* Routed page */}
+						<Switch>
+							<Route exact path="/">
+								<Home />
+							</Route>
+							<Route path="/archive">
+								<Archive />
+							</Route>
+							<Route path="/about">
+								<About />
+							</Route>
+							<Route path="/show/:slug">
+								<Show />
+							</Route>
+						</Switch>
 					</div>
-					{/* AudioPlayer */}
-					<Player setMixes={updateValues} />
 				</div>
+				{/* AudioPlayer */}
+				<Player />
 			</Router>
-		</MixesContext.Provider>
+		</GlobalState>
 	)
 }
 export default App

@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
-const MixesContext = createContext({
-	mixes: [
+const MixContext = createContext({
+	mixesIds: [
 		'/maxvibes/ninja-tune-jazz-session-part-1/',
 		'/NTSRadio/mint-condition-w-hotthobo-27th-november-2017/',
 		'/NTSRadio/full-house-6th-november-2017/',
@@ -14,6 +14,10 @@ const MixesContext = createContext({
 		'/NTSRadio/floating-points-12th-june-2017/',
 		'/NTSRadio/mount-kimbie-james-blake-8th-september-2015/',
 	],
+	mixes: [],
+	widget: {},
+	currentMix: '',
+	playing: false,
 })
 
-export default MixesContext
+export default MixContext

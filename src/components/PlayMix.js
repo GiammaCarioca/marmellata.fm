@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 
-import MixesContext from '../context/mixes-context'
+import MixContext from '../context/mix-context'
 
 const PlayMix = ({ id, children }) => {
-	const { playMix, currentMix, playing } = useContext(MixesContext)
+	const { playMix, currentMix, playing } = useContext(MixContext)
 
 	return (
 		// when our currently playing mix equals the id of the mix

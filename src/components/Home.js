@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import Mix from './Mix'
 
-import MixesContext from '../context/mixes-context'
+import MixContext from '../context/mix-context'
 
 const Home = () => {
-	const { mixes } = useContext(MixesContext)
+	const { mixes } = useContext(MixContext)
 
 	return (
 		<div className="flex flex-wrap justify-between mixes ph3 ph4-l mb5">

@@ -1,0 +1,85 @@
+import React, { useContext, useState, useEffect } from 'react'
+
+import MixContext from '../context/mix-context'
+
+const GlobalState = (props) => {
+	const { mixesIds } = useContext(MixContext)
+
+	const [mixes, setMixes] = useState([])
+	const [widget, setWidget] = useState({})
+	const [currentMix, setCurrentMix] = useState('')
+	const [playing, setPlaying] = useState(false)
+
+	const playMix = (mixName) => {
+		if (!widget) return
+
+		if (currentMix === mixName) {
+			widget.togglePlay()
+
+			widget.events.pause.on(() => setPlaying(false))
+			widget.events.play.on(() => setPlaying(true))
+
+			return
+		}
+
+		if (currentMix !== mixName) {
+			setCurrentMix(mixName)
+
+			widget.load(mixName, false)
+
+			setPlaying(false)
+
+			widget.events.pause.on(() => setPlaying(false))
+			widget.events.play.on(() => setPlaying(true))
+
+			return
+		}
+	}
+
+	useEffect(() => {
+		const fetchingMixes = (mixesIds) => {
+			return Promise.all(
+				mixesIds.map((id) =>
+					fetch(`https://api.mixcloud.com${id}`)
+						.then((response) => response.json())
+						.then((data) => data)
+				)
+			)
+		}
+
+		const updateWithIds = (mixes) => {
+			return mixes.map((mix) => ({
+				...mix,
+				id: mix.key,
+			}))
+		}
+
+		const setData = async (mixesIds) => {
+			const mixesWithoutIds = await fetchingMixes(mixesIds)
+			const mixesWithIds = await updateWithIds(mixesWithoutIds)
+
+			return setMixes(mixesWithIds)
+		}
+
+		setData(mixesIds)
+	}, [mixesIds, setMixes])
+
+	return (
+		<MixContext.Provider
+			value={{
+				mixes,
+				playMix,
+				setPlaying,
+				setCurrentMix,
+				setWidget,
+				playing,
+				currentMix,
+				widget,
+			}}
+		>
+			{props.children}
+		</MixContext.Provider>
+	)
+}
+
+export default GlobalState
