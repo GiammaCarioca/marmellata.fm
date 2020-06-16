@@ -44,7 +44,7 @@ const FeaturedMix = () => {
 		getFeat()
 	}, [currentMix, featuredMix, mixes])
 
-	const { id, slug, name, pictures = {} } = featMix
+	const { id, slug, name, pictures = {}, picture_primary_color } = featMix
 
 	return (
 		<>
@@ -53,6 +53,7 @@ const FeaturedMix = () => {
 					className="w-50-l vh-100 flex items-center justify-center cover bg-center bg-featured pad-bottom fixed-l left-0 mix-overlay"
 					style={{
 						backgroundImage: `url(${pictures.extra_large})`,
+						backgroundColor: `#${picture_primary_color}`,
 					}}
 				>
 					<div className="w-100 tc pa3 relative z-2">
