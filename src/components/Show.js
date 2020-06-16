@@ -29,17 +29,9 @@ const Tags = ({ tags }) => (
 )
 
 const Show = () => {
-	const { mixes } = useContext(MixContext)
+	const { mixes, getMixFromSlug, setFeaturedMix } = useContext(MixContext)
 	const [mix, setMix] = useState({})
 	const { slug } = useParams()
-
-	const getMixFromSlug = async (mixes, slug) => {
-		const result = await mixes.filter((mix) => mix.slug === slug)
-
-		if (result) return result[0]
-	}
-
-	getMixFromSlug(mixes, slug)
 
 	useEffect(() => {
 		const setShowPage = async (mixes, slug) => {
@@ -49,9 +41,19 @@ const Show = () => {
 		}
 
 		setShowPage(mixes, slug)
-	}, [mixes, slug])
+	}, [getMixFromSlug, mixes, slug])
 
-	const { description, play_count, created_time, audio_length, tags } = mix
+	const { description, play_count, created_time, audio_length, tags, id } = mix
+
+	// when we mount our show component, we want to set
+	// the featuredMix to be the currently viewed mix
+	useEffect(() => {
+		setFeaturedMix(id)
+
+		return () => {
+			setFeaturedMix(false)
+		}
+	}, [id, setFeaturedMix])
 
 	return (
 		<div className={'ph3 ph4-l pad-bottom'}>

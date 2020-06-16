@@ -1,19 +1,42 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import PlayMix from './PlayMix'
 import PlayButton from './PlayButton'
 
 import MixContext from '../context/mix-context'
 
 const FeaturedMix = () => {
-	const { mixes } = useContext(MixContext)
+	const { mixes, featuredMix, currentMix } = useContext(MixContext)
+	const [featMix, setFeatMix] = useState('')
 
-	// this makes a variable from our first mix in the array
-	const [firstMix = {}] = mixes
-	const { id, name, pictures = {} } = firstMix
+	// on the show page, we are going to set the featuredMix
+	// to be the currently viewed mix
+
+	useEffect(() => {
+		const getFeat = () => {
+			// 1. if we have a featuredMix, we show that first
+			// 2. if there's a currently playing mix, we show that next
+			// 3. otherwise we just show the first mix
+
+			let featMix
+
+			featuredMix
+				? ([featMix] = mixes.filter((mix) => mix.id === featuredMix))
+				: ([featMix] = mixes.filter((mix) => mix.id === currentMix))
+
+			// this makes a variable from our first mix in the array
+			const [firstMix = {}] = mixes
+
+			return setFeatMix(featMix || firstMix)
+		}
+
+		getFeat()
+	}, [currentMix, featuredMix, mixes])
+
+	const { id, name, pictures = {} } = featMix
 
 	return (
 		<>
-			{firstMix && (
+			{featMix && (
 				<div
 					className="w-50-l vh-100 flex items-center justify-center cover bg-center bg-featured pad-bottom fixed-l left-0 mix-overlay"
 					style={{

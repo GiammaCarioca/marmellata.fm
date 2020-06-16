@@ -9,6 +9,13 @@ const GlobalState = (props) => {
 	const [widget, setWidget] = useState({})
 	const [currentMix, setCurrentMix] = useState('')
 	const [playing, setPlaying] = useState(false)
+	const [featuredMix, setFeaturedMix] = useState('')
+
+	const getMixFromSlug = async (mixes, slug) => {
+		const result = await mixes.filter((mix) => mix.slug === slug)
+
+		if (result) return result[0]
+	}
 
 	const playMix = (mixName) => {
 		if (!widget) return
@@ -75,6 +82,9 @@ const GlobalState = (props) => {
 				playing,
 				currentMix,
 				widget,
+				getMixFromSlug,
+				featuredMix,
+				setFeaturedMix,
 			}}
 		>
 			{props.children}

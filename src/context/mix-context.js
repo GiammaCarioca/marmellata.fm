@@ -18,6 +18,7 @@ const MixContext = createContext({
 	widget: {},
 	currentMix: '',
 	playing: false,
+	featuredMix: '',
 })
 
 export default MixContext
