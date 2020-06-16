@@ -5,8 +5,18 @@ import PlayButton from './PlayButton'
 import MixContext from '../context/mix-context'
 
 const FeaturedMix = () => {
-	const { mixes, featuredMix, currentMix } = useContext(MixContext)
+	const { mixes, featuredMix, currentMix, playing } = useContext(MixContext)
 	const [featMix, setFeatMix] = useState('')
+
+	const getTitle = () => {
+		if (featuredMix) {
+			return 'Currently viewing'
+		} else if (currentMix && playing) {
+			return 'Currently playing'
+		} else {
+			return 'Featured mix'
+		}
+	}
 
 	// on the show page, we are going to set the featuredMix
 	// to be the currently viewed mix
@@ -45,7 +55,7 @@ const FeaturedMix = () => {
 				>
 					<PlayMix id={id}>
 						<div className="w-100 tc pa3 relative z-2">
-							<p className="b biryani f6 white ttu">Featured mix</p>
+							<p className="b biryani f6 white ttu">{getTitle()}</p>
 							<h1 className="mix-title mt0 mb3 anton white ttu">{name}</h1>
 							<PlayButton />
 						</div>
